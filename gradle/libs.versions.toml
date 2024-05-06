@@ -1,13 +1,17 @@
 [versions]
 agp = "8.3.2"
 kotlin = "1.9.0"
-coreKtx = "1.13.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.9.0"
-composeBom = "2023.08.00"
+composeBom = "2024.05.00"
+okhttpBom = "4.12.0"
+retrofit = "2.11.0"
+ksp = "1.9.20-1.0.14"
+daggerHilt = "2.49"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,8 +28,16 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+squareup-okhttp-bom = { group = "com.squareup.okhttp3", name="okhttp-bom", version.ref = "okhttpBom" }
+squareup-okhttp = { group = "com.squareup.okhttp3",  name = "okhttp"}
+squareup-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor"}
+squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
+dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+googleDevtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+googleDaggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt"}
 
