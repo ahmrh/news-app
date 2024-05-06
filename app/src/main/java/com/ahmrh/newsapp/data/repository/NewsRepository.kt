@@ -19,8 +19,7 @@ import javax.inject.Singleton
 class NewsRepository @Inject constructor(
     private val newsApiService: NewsApiService
 ) {
-
-    fun getAllNews(queryString: String): Flow<List<News>?> = callbackFlow {
+    fun getNews(queryString: String): Flow<List<News>> = callbackFlow {
 
         val client = newsApiService.getNews(queryString)
         client.enqueue(object : Callback<NewsResponse> {
@@ -31,7 +30,7 @@ class NewsRepository @Inject constructor(
                 if (response.isSuccessful) {
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
-                    }
+                    } ?: emptyList()
                     trySend(newsList)
                 } else {
                     val error = IOException("Network error: ${response.code()}")
@@ -48,7 +47,7 @@ class NewsRepository @Inject constructor(
         awaitClose { client.cancel() }
     }
 
-    fun getAllHeadlines(queryString: String): Flow<List<News>?> = callbackFlow {
+    fun getHeadlines(): Flow<List<News>> = callbackFlow {
 
         val client = newsApiService.getHeadlines()
         client.enqueue(object : Callback<NewsResponse> {
@@ -59,7 +58,7 @@ class NewsRepository @Inject constructor(
                 if (response.isSuccessful) {
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
-                    }
+                    } ?: emptyList()
                     trySend(newsList)
                 } else {
                     val error = IOException("Network error: ${response.code()}")
