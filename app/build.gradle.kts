@@ -11,14 +11,16 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        buildConfigField("String", "API_KEY", "\"d2b27b80a4a345a38edb0559020c0c65\"")
+        buildConfigField("String", "API_URL", "\"https://newsapi.org/v2/\"")
+
         applicationId = "com.ahmrh.newsapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner =
-            "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -45,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -74,6 +77,10 @@ dependencies {
     implementation(platform(libs.squareup.okhttp.bom))
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
+
+    // Serialization
+    implementation(libs.squareup.converter.gson)
+    implementation(libs.google.code.gson)
     
     // Dependency Injection
     implementation(libs.dagger.hilt.android)

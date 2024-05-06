@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.2"
+gson = "2.10.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -32,6 +33,8 @@ squareup-okhttp-bom = { group = "com.squareup.okhttp3", name="okhttp-bom", versi
 squareup-okhttp = { group = "com.squareup.okhttp3",  name = "okhttp"}
 squareup-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor"}
 squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+squareup-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+google-code-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 
