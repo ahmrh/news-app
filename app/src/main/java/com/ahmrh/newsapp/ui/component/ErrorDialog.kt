@@ -7,12 +7,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun ErrorDialog(
     onDismiss: () -> Unit,
     title: String,
     errorMessage: String,
+    dismissText: String = "Dismiss"
 ) {
 
     AlertDialog(
@@ -20,10 +22,10 @@ fun ErrorDialog(
             Icon(Icons.Default.Info, contentDescription = "Example Icon")
         },
         title = {
-            Text(text = title)
+            Text(text = title, )
         },
         text = {
-            Text(text = errorMessage)
+            Text(text = errorMessage, textAlign = TextAlign.Justify)
         },
         onDismissRequest = {
             onDismiss()
@@ -35,7 +37,7 @@ fun ErrorDialog(
                     onDismiss()
                 }
             ) {
-                Text("Dismiss")
+                Text(dismissText)
             }
         }
     )

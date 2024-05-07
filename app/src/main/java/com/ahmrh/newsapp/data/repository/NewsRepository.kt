@@ -31,7 +31,7 @@ class NewsRepository @Inject constructor(
                 if (response.isSuccessful) {
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
-                    } ?: emptyList()
+                    }?.sortedByDescending { news -> news.publishedAt } ?: emptyList()
                     trySend(NewsResult.Success(newsList))
                 } else {
                     val error = IOException("Network error: ${response.code()}")
@@ -40,7 +40,7 @@ class NewsRepository @Inject constructor(
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                val error = IOException("Failure: ${t.localizedMessage}")
+                val error = IOException("Failure: ${t.message}")
                 trySend(NewsResult.Error(error))
             }
         })
@@ -59,7 +59,7 @@ class NewsRepository @Inject constructor(
                 if (response.isSuccessful) {
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
-                    } ?: emptyList()
+                    }?.sortedByDescending { news -> news.publishedAt } ?: emptyList()
                     trySend(NewsResult.Success(newsList))
                 } else {
                     val error = IOException("Network error: ${response.code()}")
@@ -68,7 +68,7 @@ class NewsRepository @Inject constructor(
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                val error = IOException("Failure: ${t.localizedMessage}")
+                val error = IOException("Failure: ${t.message}")
                 trySend(NewsResult.Error(error))
             }
         })

@@ -19,12 +19,6 @@ class ExploreViewModel @Inject constructor(
 
 ): ViewModel() {
 
-    private var _recommendedSearchUiState: MutableStateFlow<UiState<List<News>>> =
-        MutableStateFlow(UiState.Loading)
-    val recommendedSearchUiState: StateFlow<UiState<List<News>>>
-        get() = _recommendedSearchUiState
-
-
     private var _newsListUiState: MutableStateFlow<UiState<List<News>>> =
         MutableStateFlow(UiState.Idle)
     val newsListUiState: StateFlow<UiState<List<News>>>

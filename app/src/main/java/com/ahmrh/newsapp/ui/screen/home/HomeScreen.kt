@@ -47,6 +47,9 @@ fun HomeScreen(
     val navigateToExplore = {
         navController.navigate(Destination.Explore.route)
     }
+    val navigateToAbout = {
+        navController.navigate(Destination.About.route)
+    }
 
     val headlineListUiState =
         viewModel.headlineListUiState.collectAsState().value
@@ -57,23 +60,30 @@ fun HomeScreen(
 
         }
         is UiState.Success -> {
-            HomeScreenContent(headlineList = headlineListUiState.data, navigateToExplore)
+            HomeScreenContent(headlineList = headlineListUiState.data, navigateToExplore, navigateToAbout)
         }
-
         is UiState.Loading -> {
             LoadingContent()
         }
-
         is UiState.Error -> {
             var openDialogError by remember{ mutableStateOf(true) }
 
-            ErrorDialog(
-                errorMessage = headlineListUiState.errorMessage,
-                onDismiss = {
-                    openDialogError = false
-                },
-                title = "Error"
-            )
+            when{
+                openDialogError -> {
+
+                    ErrorDialog(
+                        errorMessage = headlineListUiState.errorMessage,
+                        onDismiss = {
+                            viewModel.getHeadline()
+                            openDialogError = false
+                        },
+                        title = "Error",
+                        dismissText = "Retry"
+
+                    )
+
+                }
+            }
 
         }
     }
@@ -86,6 +96,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     headlineList: List<News>,
     navigateToExplore: () -> Unit = {},
+    navigateToAbout: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -104,15 +115,17 @@ fun HomeScreenContent(
                     }) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
-                            contentDescription = "Localized description"
+                            contentDescription = "Explore"
                         )
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = {
+                        navigateToAbout()
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.Info,
-                            contentDescription = "Localized description"
+                            contentDescription = "About"
                         )
                     }
                 },
@@ -125,7 +138,8 @@ fun HomeScreenContent(
 
             modifier = Modifier
                 .padding(it)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(headlineList) { headline ->

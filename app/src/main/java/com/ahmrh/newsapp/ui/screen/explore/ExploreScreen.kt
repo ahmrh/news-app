@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.ahmrh.newsapp.common.state.UiState
+import com.ahmrh.newsapp.ui.component.ErrorDialog
 import com.ahmrh.newsapp.ui.component.LoadingContent
 import com.ahmrh.newsapp.ui.component.News
 import com.ahmrh.newsapp.ui.theme.NewsAppTheme
@@ -67,6 +68,8 @@ fun ExploreScreenContent(
 ){
     val newsListUiState = viewModel?.newsListUiState?.collectAsState()?.value
 
+    var queryString by remember { mutableStateOf("") }
+    var isActive by remember {  mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -80,11 +83,9 @@ fun ExploreScreenContent(
             Column(
                 modifier = Modifier
                     .padding(it)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical= 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var queryString by remember { mutableStateOf("") }
-                var isActive by remember {  mutableStateOf(false) }
 
                 SearchBar(
                     modifier = Modifier.focusRequester(focusRequester),
@@ -144,6 +145,22 @@ fun ExploreScreenContent(
                     }
                     is UiState.Error -> {
 
+                        var openDialogError by remember{ mutableStateOf(true) }
+
+                        when{
+                            openDialogError -> {
+                                ErrorDialog(
+                                    errorMessage = newsListUiState.errorMessage,
+                                    onDismiss = {
+                                        viewModel.getNews(queryString)
+                                        openDialogError = false
+                                    },
+                                    title = "Error",
+                                    dismissText = "Retry"
+                                )
+
+                            }
+                        }
                     }
                     else -> {
 

@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
         getHeadline()
     }
 
-    private fun getHeadline() {
+    fun getHeadline() {
         viewModelScope.launch {
             _headlineListUiState.value = UiState.Loading
             newsUseCases.getHeadline()
