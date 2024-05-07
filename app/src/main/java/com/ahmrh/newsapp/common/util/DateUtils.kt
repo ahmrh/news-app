@@ -1,4 +1,4 @@
-package com.ahmrh.newsapp.common
+package com.ahmrh.newsapp.common.util
 
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -11,8 +11,10 @@ import kotlin.time.Duration
 object DateUtils {
 
     fun stringToDate(dateString: String): Date {
-        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        return formatter.parse(dateString) as Date
+        val trimmedDateString = dateString.substring(0, 19) // Extracts "yyyy-MM-dd'T'HH:mm:ss"
+
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        return formatter.parse(trimmedDateString)
     }
     fun getElapsedTime(date: Date): String {
         val now = Calendar.getInstance()

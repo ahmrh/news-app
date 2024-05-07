@@ -1,5 +1,6 @@
 package com.ahmrh.newsapp.core
 
+import com.ahmrh.newsapp.BuildConfig
 import com.ahmrh.newsapp.data.repository.NewsRepository
 import com.ahmrh.newsapp.data.source.network.NewsApiService
 import dagger.Module
@@ -39,7 +40,7 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
+            .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

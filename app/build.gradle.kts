@@ -72,19 +72,25 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(libs.coil.compose)
+
     // Network Library
     implementation(libs.squareup.retrofit)
     implementation(platform(libs.squareup.okhttp.bom))
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
 
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
     // Serialization
     implementation(libs.squareup.converter.gson)
     implementation(libs.google.code.gson)
     
-    // Dependency Injection
+    // Dagger Hilt
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Testing
     testImplementation(libs.junit)
@@ -95,5 +101,6 @@ dependencies {
     androidTestImplementation(libs.squareup.retrofit)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
 }

@@ -1,7 +1,6 @@
-package com.ahmrh.newsapp.common
+package com.ahmrh.newsapp.common.util
 
 import com.ahmrh.newsapp.domain.entity.News
-import java.util.Date
 
 object EntityUtils {
 
