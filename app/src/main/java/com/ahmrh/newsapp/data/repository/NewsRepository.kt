@@ -19,9 +19,10 @@ import javax.inject.Singleton
 class NewsRepository @Inject constructor(
     private val newsApiService: NewsApiService
 ) {
-    fun getNews(queryString: String): Flow<List<News>> = callbackFlow {
+    fun getNews(queryString: String): Flow<NewsResult> = callbackFlow {
+        val queryStringModified = "\"${queryString}\""
 
-        val client = newsApiService.getNews(queryString)
+        val client = newsApiService.getNews(query = queryStringModified)
         client.enqueue(object : Callback<NewsResponse> {
             override fun onResponse(
                 call: Call<NewsResponse>,
@@ -31,23 +32,23 @@ class NewsRepository @Inject constructor(
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
                     } ?: emptyList()
-                    trySend(newsList)
+                    trySend(NewsResult.Success(newsList))
                 } else {
                     val error = IOException("Network error: ${response.code()}")
-                    throw error
+                    trySend(NewsResult.Error(error))
                 }
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
                 val error = IOException("Failure: ${t.localizedMessage}")
-                throw error
+                trySend(NewsResult.Error(error))
             }
         })
 
         awaitClose { client.cancel() }
     }
 
-    fun getHeadlines(): Flow<List<News>> = callbackFlow {
+    fun getHeadlines(): Flow<NewsResult> = callbackFlow {
 
         val client = newsApiService.getHeadlines()
         client.enqueue(object : Callback<NewsResponse> {
@@ -59,20 +60,24 @@ class NewsRepository @Inject constructor(
                     val newsList = response.body()?.articles?.map { article ->
                         article?.toNews() ?: Article().toNews()
                     } ?: emptyList()
-                    trySend(newsList)
+                    trySend(NewsResult.Success(newsList))
                 } else {
                     val error = IOException("Network error: ${response.code()}")
-                    throw error
+                    trySend(NewsResult.Error(error))
                 }
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
                 val error = IOException("Failure: ${t.localizedMessage}")
-                throw error
+                trySend(NewsResult.Error(error))
             }
         })
 
         awaitClose { client.cancel() }
     }
 
+}
+sealed class NewsResult {
+    data class Success(val newsList: List<News>) : NewsResult()
+    data class Error(val throwable: Throwable) : NewsResult()
 }

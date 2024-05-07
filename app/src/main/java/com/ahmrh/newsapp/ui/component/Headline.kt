@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -45,7 +46,8 @@ fun Headline(
         Column(
             modifier = modifier.clickable{
                 onClick()
-            },
+            }
+                .padding(vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             SubcomposeAsyncImage(
@@ -78,7 +80,7 @@ fun Headline(
 
                 Text(
                     news.source,
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
                     news.title,
@@ -92,7 +94,7 @@ fun Headline(
 
             Text(
                 DateUtils.getElapsedTime(news.publishedAt),
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.bodyMedium
             )
 
             HorizontalDivider()

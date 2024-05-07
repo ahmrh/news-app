@@ -2,8 +2,6 @@ package com.ahmrh.newsapp.ui.screen.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,15 +10,17 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,9 +51,13 @@ fun HomeScreen(
     val headlineListUiState =
         viewModel.headlineListUiState.collectAsState().value
 
+
     when (headlineListUiState) {
+        is UiState.Idle -> {
+
+        }
         is UiState.Success -> {
-            HomeScreenContent(headlineList = headlineListUiState.data)
+            HomeScreenContent(headlineList = headlineListUiState.data, navigateToExplore)
         }
 
         is UiState.Loading -> {
@@ -61,10 +65,14 @@ fun HomeScreen(
         }
 
         is UiState.Error -> {
+            var openDialogError by remember{ mutableStateOf(true) }
+
             ErrorDialog(
                 errorMessage = headlineListUiState.errorMessage,
-                onDismiss = { },
-                onConfirm = { }
+                onDismiss = {
+                    openDialogError = false
+                },
+                title = "Error"
             )
 
         }
@@ -76,7 +84,8 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(
-    headlineList: List<News>
+    headlineList: List<News>,
+    navigateToExplore: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -90,7 +99,9 @@ fun HomeScreenContent(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = {
+                        navigateToExplore()
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.Search,
                             contentDescription = "Localized description"
@@ -108,21 +119,19 @@ fun HomeScreenContent(
             )
         }
     ) {
-        Surface {
 
-            val uriHandler = LocalUriHandler.current
-            LazyColumn(
+        val uriHandler = LocalUriHandler.current
+        LazyColumn(
 
-                modifier = Modifier
-                    .padding(it)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(headlineList) { headline ->
-                    Headline(news = headline, onClick = {
-                        uriHandler.openUri(headline.url)
-                    })
-                }
+            modifier = Modifier
+                .padding(it)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(headlineList) { headline ->
+                Headline(news = headline, onClick = {
+                    uriHandler.openUri(headline.url)
+                })
             }
         }
     }

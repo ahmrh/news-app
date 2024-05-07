@@ -1,4 +1,4 @@
-package com.ahmrh.newsapp.ui.screen.home
+package com.ahmrh.newsapp.ui.screen.explore
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,36 +10,38 @@ import com.ahmrh.newsapp.domain.usecase.NewsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class ExploreViewModel @Inject constructor(
     private val newsUseCases: NewsUseCases
-) : ViewModel() {
-    private var _headlineListUiState: MutableStateFlow<UiState<List<News>>> =
+
+): ViewModel() {
+
+    private var _recommendedSearchUiState: MutableStateFlow<UiState<List<News>>> =
+        MutableStateFlow(UiState.Loading)
+    val recommendedSearchUiState: StateFlow<UiState<List<News>>>
+        get() = _recommendedSearchUiState
+
+
+    private var _newsListUiState: MutableStateFlow<UiState<List<News>>> =
         MutableStateFlow(UiState.Idle)
-    val headlineListUiState: StateFlow<UiState<List<News>>>
-        get() = _headlineListUiState
+    val newsListUiState: StateFlow<UiState<List<News>>>
+        get() = _newsListUiState
 
-    init {
-        getHeadline()
-    }
-
-    private fun getHeadline() {
+     fun getNews(queryString: String) {
         viewModelScope.launch {
-            _headlineListUiState.value = UiState.Loading
-            newsUseCases.getHeadline()
+            _newsListUiState.value = UiState.Loading
+            newsUseCases.getNews(queryString)
                 .collect{ newsResult ->
                     when(newsResult){
                         is NewsResult.Success -> {
-                            _headlineListUiState.value = UiState.Success(newsResult.newsList)
+                            _newsListUiState.value = UiState.Success(newsResult.newsList)
                             Log.e(TAG, "Success: $newsResult.newsList")
                         }
                         is NewsResult.Error -> {
-                            _headlineListUiState.value = UiState.Error("${newsResult.throwable.message}")
+                            _newsListUiState.value = UiState.Error("${newsResult.throwable.message}")
                             Log.e(TAG, "Error: ${newsResult.throwable.message}")
                         }
 

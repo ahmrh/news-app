@@ -26,8 +26,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewsAppTheme {
                 // A surface container using the 'background' color from the theme
-                navController = rememberNavController()
-                NavGraph(navController = navController)
+                Surface {
+
+                    navController = rememberNavController()
+                    NavGraph(navController = navController)
+                }
             }
         }
     }
