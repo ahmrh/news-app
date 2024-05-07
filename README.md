@@ -1,5 +1,5 @@
 # News App
-This app is a news app using news-api.org, implementing MVVM architecture and Retrofit. I try to make the code clean and scalable. If you have any feedback, feel free to add issue on this project or you can DM me.
+This app is a news app using news-api.org, implementing MVVM architecture and Retrofit. I try to make the code clean and scalable. If you have any feedback, feel free to add issue on this project or DM me.
 
 ## ✨ Features
 - Fetching top headlines from news API
